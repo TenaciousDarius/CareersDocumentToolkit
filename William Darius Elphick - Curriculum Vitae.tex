@@ -1,0 +1,449 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[11pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}%
+        {\begin{list}{}{%
+       \setlength{\leftmargin}{\bibhang}%
+       \setlength{\itemindent}{-\leftmargin}%
+       \setlength{\itemsep}{\bibsep}%
+       \setlength{\parsep}{\z@}%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=1.2in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=1in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+\usepackage[shortlabels]{enumitem}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, Darius Elphick - Curriculum Vitae%
+                    \hfill % +LP
+%                    \arabic{page}                               % -LP
+                    \arabic{page} of \protect\pageref*{LastPage} \,}}  
+                    
+%\setlength{\footpageshift}
+%          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+%\lfoot{\hspace{\footpageshift}%
+%       \parbox{4in}{\, \hfill %
+%                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+%                    \hfill \,}}                  
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+% (optional argument typesets an object right-justified across from name
+%  as well)
+%
+% Usage: \makeheading{name}
+%        OR
+%        \makeheading[right_object]{name}
+%
+% Place at top of document. It should be the first thing.
+% If ``right_object'' is provided in the square-braced optional
+% argument, it will be right justified on the same line as ``name'' at
+% the top of the CV. For example:
+%
+%       \makeheading[\emph{Curriculum vitae}]{Your Name}
+%
+% will put an emphasized ``Curriculum vitae'' at the top of the document
+% as a title. Likewise, a picture could be included:
+%
+%   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+%
+% the picture will be flush right across from the name.
+\newcommand{\makeheading}[2][]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}\begin{center}%
+             {\large \bfseries #2 #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+                 \end{center}
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+\renewcommand{\section}[1]{\pagebreak[3]%
+    \hyphenpenalty=10000%
+    \vspace{1.3\baselineskip}%
+    \phantomsection\addcontentsline{toc}{section}{#1}%
+    \noindent\llap{\scshape\smash{\parbox[t]{\marginparwidth}{\raggedright #1}}}%
+    \vspace{-\baselineskip}\par}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[3]}
+\newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+\providecommand*\email[1]{\href{mailto:#1}{#1}}
+% Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+%\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    \TeX}}
+\providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    \TeX}}
+\providecommand\Matlab{\textsc{Matlab}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Darius Elphick}
+
+\section{Contact Information}
+
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+\newlength{\rcollength}\setlength{\rcollength}{3in}%
+%
+%25 Haye Cottage, Bullstrode Way, Gerrards Cross, Buckinghamshire, SL9 7QT.
+
+\textit{Mobile:} 07792526693 \textit{E-mail:} \email{dariuselphick@gmail.com} 
+
+\textit{LinkedIn:} \href{http://www.linkedin.com/in/williamdariuselphick}{http://www.linkedin.com/in/williamdariuselphick}
+
+\section{Personal Profile}
+ 
+An enthusiastic mobile and web developer with programming experience on both the client and server-side. Creative and practical individual with effective team working skills as well as knowledge of good engineering practices.
+
+\section{Technical Skills}
+
+{\bf Programming Languages and Platforms}:
+\begin{innerlist}
+    \item Highly proficient developing Objective-C, Java and PHP applications.
+    \item Also proficient using Ruby on Rails, JavaEE, ASP.NET, C, C\#, C++, XHTML, CSS, JavaScript and Ajax.  
+    \item Experienced Oracle Siebel CRM developer.
+    \item Some experience of Android development.
+\end{innerlist}
+
+\halfblankline
+
+{\bf Web Service Development}:
+\begin{innerlist} 
+	\item SOAP and REST-based web services. 
+        \item Some experience implementing asynchronous workflows using messaging queues.
+\end{innerlist}
+
+\halfblankline
+
+{\bf Database Technologies}: 
+\\MySQL, SQLite, Oracle DB, Java DB (including JPA for O/RM), Microsoft SQL Server 2005 - 2010.
+
+\halfblankline
+
+{\bf Application Servers}: 
+\\Apache, Glassfish and JBoss.
+
+\halfblankline
+
+%{\bf Productivity Applications}: Microsoft Office (European Computing Driving Licence \-- 2007), LibreOffice, \TeX{} (\LaTeX{}, \BibTeX{}),  Prezi, Crystal Reports.
+
+%\halfblankline
+
+%{\bf Operating Systems}: Highly familiar with Microsoft Windows and Mac OS X. Also familiar with Fedora, CentOS and Oracle Solaris.
+
+%\halfblankline
+
+{\bf Version Control}: 
+\\SVN and Git.
+
+\halfblankline
+
+{\bf Methodologies}:
+\\ Experience working in Agile teams using FDD, XP and SCRUM.
+
+\section{Professional Experience}
+
+\href{http://www.syqic.com}{\textbf{SyQic Limited}},
+Gerrards Cross and Kuala Lumpur.
+
+\halfblankline
+
+\textit{Technical and Development Specialist}%
+        \hfill \textbf{July 2012 to Present}
+\begin{innerlist}
+\item Work as part of an international team on the company's primary IPTV product, Yoonic.
+\item Built the universal, localized iOS app for Yoonic. Designed robust app structure via the MVC-N design pattern. Used AFNetworking framework for web service integration. Cached data locally using Core Data to optimise app performance.
+\item Contribute to the back end of the application, which consists of several components built using PHP frameworks including Smarty and CakePHP. 
+\item Design and build components for integrating with partner SMS and WAP gateways for processing payments and communicating with the customer. 
+\item Make use of strong organisational skills for keeping to a strict release schedule.
+\item Provide day-to-day tech support for SyQic's UK office, including server maintenance and network management.
+\end{innerlist}
+
+
+\newpage
+
+\href{http://www.aber.ac.uk}{\textbf{Aberystwyth University}},
+Aberystwyth.
+
+\halfblankline
+
+\textit{Computer Science Advisor}%
+        \hfill \textbf{Sept. 2011 to May 2012}
+\begin{innerlist}
+\item Supported fellow students with their programing assignments.
+\end{innerlist}
+
+\halfblankline
+
+\href{http://www.gwynedd.gov.uk}{\textbf{Cyngor Gwynedd Council}},
+Caernarfon.
+
+\halfblankline
+
+\textit{Programmer/Analyst on Work Experience}%
+        \hfill \textbf{July 2011 to Sept. 2011}
+\begin{innerlist}
+\item Applied knowledge gained during my degree to specify, design and prototype a multilingual iPhone app for displaying municipal information provided by SOAP-based web services.  
+\end{innerlist}
+
+\halfblankline
+
+\textit{Programmer/Analyst on Work Experience}%
+        \hfill \textbf{June 2009 to Sept. 2010}
+\begin{innerlist}
+\item Worked with a small team on the ongoing development and support of a large scale Siebel CRM deployment.
+\item Developed strong negotiation and communication skills through interaction with project stakeholders when gathering functional requirements and presenting finished releases.     
+\end{innerlist}
+
+\section{Education}
+
+\href{http://www.aber.ac.uk}{\textbf{Aberystwyth University}}, Aberystwyth. \hfill \textbf{Sept. 2007 to June 2012}
+
+\halfblankline
+
+\textit{\href{http://www.aber.ac.uk/en/undergrad/courses/compsci/meng-software-eng/}
+             {MEng (Hons) Software Engineering}}%
+        \begin{innerlist}
+        \item[] Achieved Grade: 1st Class
+        \item[] Dissertation Topic: Accelerometer Based Gaming on iOS (70)
+        \item[] 2D multiplayer iOS game. Project made use of the cocos2D framework, Core Motion and the GameKit framework for bluetooth connectivity.   	
+        \end{innerlist}
+
+%\halfblankline
+
+%\href{http://www.llandrillo.ac.uk/default.aspx}{\textbf{Coleg Meirion Dwyfor}}, Dolgellau. \hfill \textbf{Sept. 2005 to June 2007}
+%\begin{outerlist}
+%       \item[] \textit{A Levels}: Computing (B), Chemistry (C), Maths (D)
+%        \item[] \textit{AS Level}: History (B)
+%\end{outerlist}
+
+%\halfblankline
+
+%\href{http://www.gader.gwynedd.sch.uk/index.html}{\textbf{Ysgol Y Gader}}, Dolgellau. \hfill \textbf{Sept. 2000 to June 2005}
+%\begin{outerlist}
+%        \item[] \textit{GCSEs}: 11 at grade A-C
+%\end{outerlist}
+
+%\begin{tabular}[t]{ll}
+%	Developing Internet-Based Applications (80) & Agile Methodologies (82) \\
+%	Professional Issues In Software Engineering (73) & Internet Services Administration (75) \\
+%	Formal Methods In Software Engineering (81) & Advanced Mathematics For Computer Science (81) \\
+%	Program Design, Data Structures And Algorithms (71) & Software Development Life Cycle (72) \\
+%	User Centred Design And Human Computer Interaction (71) & C++, C And Java Programming Paradigms (77) \\
+%	The Internet: Telematic Application Design And Construction (76), Database Management Systems (70) \\
+%	C And Unix Programming (87) & Software Development (85) \\
+%	Web Programming (80) & Concepts In Programming (68) \\
+%	\end{tabular}
+
+\section{Additional Information}
+
+\textbf{Other Skills:} Fluent Welsh speaker. Full clean driving license.
+
+\halfblankline
+
+\textbf{Other Achievements:} Black Belt in Wado Ryu Karate.
+
+\halfblankline
+
+\textbf{Interests:} I regularly attend and volunteer at software development conferences including FOSDEM and iOSDevUK. I also enjoy training with a local Karate club, of which I have been a member for eight years and have represented at several tournaments. My reading preferences cover a range of genres, from science fiction and graphic novels to World War II history.
+
+\section{Referees}
+
+%References available on request.
+Mike Kennett, SyQic Ltd, Europa House, Packhorse Road, Gerrards Cross, Buckinghamshire, SL9 8BQ
+
+E-mail:~\href{mailto:mike@syqic.com}{mike@syqic.com}; Phone: 01753 880628
+\begin{innerlist}
+   \item \emph{Mr Kennett is my line manager at my current job with SyQic.}
+\end{innerlist}
+
+\halfblankline
+
+Neil Taylor, Dept. Computer Science, Aberystwyth University, Aberystwyth, Ceredigion, SY23 3DB
+
+E-mail:~\href{mailto:nst@aber.ac.uk}{nst@aber.ac.uk}; Phone: 01970 621528
+\begin{innerlist}
+   \item \emph{Mr Taylor was my group's supervisor for the major project we completed during the final year of our degree scheme.}
+\end{innerlist}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------%
+% The following is copyright and licensing information for
+% redistribution of this LaTeX source code; it also includes a liability
+% statement. If this source code is not being redistributed to others,
+% it may be omitted. It has no effect on the function of the above code.
+%----------------------------------------------------------------------%
+% Copyright (c) 2007, 2008, 2009, 2010, 2011 by Theodore P. Pavlic
+%
+% Unless otherwise expressly stated, this work is licensed under the
+% Creative Commons Attribution-Noncommercial 3.0 United States License. To
+% view a copy of this license, visit
+% http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to
+% Creative Commons, 171 Second Street, Suite 300, San Francisco,
+% California, 94105, USA.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+% OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+% MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+% IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+% CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+% SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+%----------------------------------------------------------------------%
