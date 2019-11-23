@@ -1,0 +1,400 @@
+\documentclass[11pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}%
+        {\begin{list}{}{%
+       \setlength{\leftmargin}{\bibhang}%
+       \setlength{\itemindent}{-\leftmargin}%
+       \setlength{\itemsep}{\bibsep}%
+       \setlength{\parsep}{\z@}%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=1.2in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=1in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+\usepackage[shortlabels]{enumitem}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, Darius Elphick - Curriculum Vitae%
+                    \hfill % +LP
+%                    \arabic{page}                               % -LP
+                    \arabic{page} of \protect\pageref*{LastPage} \,}}  
+                    
+%\setlength{\footpageshift}
+%          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+%\lfoot{\hspace{\footpageshift}%
+%       \parbox{4in}{\, \hfill %
+%                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+%                    \hfill \,}}                  
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+% (optional argument typesets an object right-justified across from name
+%  as well)
+%
+% Usage: \makeheading{name}
+%        OR
+%        \makeheading[right_object]{name}
+%
+% Place at top of document. It should be the first thing.
+% If ``right_object'' is provided in the square-braced optional
+% argument, it will be right justified on the same line as ``name'' at
+% the top of the CV. For example:
+%
+%       \makeheading[\emph{Curriculum vitae}]{Your Name}
+%
+% will put an emphasized ``Curriculum vitae'' at the top of the document
+% as a title. Likewise, a picture could be included:
+%
+%   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+%
+% the picture will be flush right across from the name.
+\newcommand{\makeheading}[2][]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}\begin{center}%
+             {\large \bfseries #2 #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+                 \end{center}
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+\renewcommand{\section}[1]{\pagebreak[3]%
+    \hyphenpenalty=10000%
+    \vspace{1.3\baselineskip}%
+    \phantomsection\addcontentsline{toc}{section}{#1}%
+    \noindent\llap{\scshape\smash{\parbox[t]{\marginparwidth}{\raggedright #1}}}%
+    \vspace{-\baselineskip}\par}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[3]}
+\newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+\providecommand*\email[1]{\href{mailto:#1}{#1}}
+% Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+%\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    \TeX}}
+\providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    \TeX}}
+\providecommand\Matlab{\textsc{Matlab}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Darius Elphick}
+
+\section{Contact Information}
+
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+\newlength{\rcollength}\setlength{\rcollength}{3in}%
+%
+
+\textit{Phone:} +447792526693
+
+\textit{E-mail:} \email{hi@tenaciousdarius.dev} 
+
+\textit{LinkedIn:} \href{http://www.linkedin.com/in/dariuselphick}{http://www.linkedin.com/in/dariuselphick}
+
+\section{Personal Profile}
+ 
+Senior Frontend and Mobile Developer with over ten years of experience building, testing and maintaining large-scale commercial applications in the media and transport industries. Experience building fully tested software across the stack as well as managing agile development teams practicing TDD and BDD.
+
+\section{Technical Skills}
+
+{\bf Web Development and Testing}:
+\begin{innerlist}
+    \item HTML5, CSS3 and Responsive Web Design
+    \item OO Javascript, ReactJS, Redux and JQuery  
+    \item Node.js and Express
+    \item Jest, Mocha, Chai, PhantomJS, Karma, Storybook, Cucumber and WebDriver.io
+    \item Webpack, Grunt
+    \item Browser Support including IE 8 - 11, Edge, Chrome, Firefox and Safari
+    \item Accessibility Standards including Semantic HTML and ARIA Tags
+    \item Design Patterns for building and testing large, scalable web applications including MVVM, MVC and React Redux
+\end{innerlist}
+
+\halfblankline
+
+{\bf Behaviour and Test Driven Development}:
+Experience leading and mentoring teams practicing TDD and BDD. Also experience defining, rolling out and administering test and release processes which included Code Reviews, Manual and Automated Testing as well as UAT.
+
+\halfblankline
+
+{\bf Web Services}: 
+Designing, integrating with and testing REST and SOAP web services using SOAPUI.
+
+\halfblankline
+
+{\bf DevOps}: 
+AWS (EC2, S3, RDS, Route 53, CloudWatch, IAM, Lamda), Docker, Network Management and Security.
+
+\halfblankline
+
+{\bf Version Control}: 
+Git and Mercurial
+
+\halfblankline
+
+{\bf Methodologies}:
+Experience working in Agile teams using SCRUM, SAFE, FDD and XP. Certified SCRUM Master.
+
+\section{Professional Experience}
+
+\href{https://www.thetrainline.com}{\textbf{The Trainline}},
+London.
+
+\halfblankline
+
+\textit{Engineering Team Lead}%
+        \hfill \textbf{Apr. 2019 to Oct. 2019}
+\begin{innerlist}
+\item Managed a team of seven Frontend Developers working on the company's mobile web product, including day to day management of timelines and prioritisation, mentorship, setting objectives and performance review.
+\item Introduced new testing and release process to improve quality, working closely with other leads and the QA team. Included specifying and implementing an acceptance testing schema using an in-house built framework harnessing Webdriver.io.
+\item Provided day-to-day SCRUM team leadership.
+\end{innerlist}
+
+\halfblankline
+
+\href{https://www.bbcglobalnews.com/home/}{\textbf{BBC Global News}},
+London.
+
+\halfblankline
+
+\textit{Senior Front End Developer}%
+        \hfill \textbf{Apr. 2017 to Mar. 2019}
+\begin{innerlist}
+\item Developed and maintained the BBC Features Websites as well as other commercial projects.
+\item Managed a team of two other Front End Developers using TDD to build a new PWA version of the sites using React and Redux and tested with Jest and Storybook.
+\end{innerlist}
+
+\halfblankline
+
+\href{https://www.bbcstudios.com}{\textbf{BBC Studios}},
+London.
+
+\halfblankline
+
+\textit{Senior Front End Developer}%
+        \hfill \textbf{Aug. 2015 to Mar. 2017}
+\begin{innerlist}
+\item Worked with several teams throughout the BBC on development, testing and release of the BAFTA-nominated Sir David Attenborough's Story of Life, a cross-platform app for accessing archived nature documentaries.
+\item Day-to-day DevOps work supporting the backend of the BBC Features websites.
+\end{innerlist}
+
+\halfblankline
+
+\textit{Web Developer}%
+        \hfill \textbf{Aug. 2014 to Aug. 2015}
+\begin{innerlist}
+\item Migrated all BBC Features sites to a new platform built in house using Node.js and Express. Contributed to the design of the new framework, called Glaze, using a variation of the MVVM design pattern.
+\end{innerlist}
+
+\halfblankline
+
+\href{http://www.syqic.com}{\textbf{SyQic Limited}},
+Gerrards Cross and Kuala Lumpur.
+
+\halfblankline
+
+\textit{Technical and Development Specialist}%
+        \hfill \textbf{Jul. 2012 to Aug. 2014}
+\begin{innerlist}
+\item As part of an international team, built the universal, localised iOS app for Yoonic, the company's primary IPTV product. Designed robust app structure via the MVC-N design pattern.
+\item Also worked on the web-version of Yoonic, built using AngularJS, HTML5 and CSS3.
+\item Built and integrated with REST and SOAP Web Services. Used SOAPUI for testing APIs.
+\end{innerlist}
+
+\halfblankline
+
+\href{http://www.aber.ac.uk}{\textbf{Aberystwyth University}},
+Aberystwyth.
+
+\halfblankline
+
+\textit{Computer Science Advisor}%
+        \hfill \textbf{Sept. 2011 to May 2012}
+\begin{innerlist}
+\item Advised fellow students on their programming assignments and provided debugging support.
+\end{innerlist}
+
+\halfblankline
+
+\href{http://www.gwynedd.gov.uk}{\textbf{Cyngor Gwynedd Council}},
+Caernarfon.
+
+\halfblankline
+
+\textit{Programmer/Analyst on Work Experience}%
+        \hfill \textbf{July 2011 to Sept. 2011}
+\begin{innerlist}
+\item Specified, designed and prototyped a multilingual iPhone app for displaying municipal information provided by a SOAP web service.
+\end{innerlist}
+
+\halfblankline
+
+\textit{Programmer/Analyst on Work Experience}%
+        \hfill \textbf{June 2009 to Sept. 2010}
+\begin{innerlist}
+\item Worked with a small team on the ongoing development and support of a large scale Siebel CRM deployment.
+\item Liaised on-site with project stakeholders when performing requirements analysis and presenting completed projects.
+\item Defined test cases and validated software for release.
+\end{innerlist}
+
+\section{Education}
+
+\href{http://www.aber.ac.uk}{\textbf{Aberystwyth University}}, Aberystwyth. \hfill \textbf{Sept. 2007 to June 2012}
+
+\halfblankline
+
+\textit{\href{http://www.aber.ac.uk/en/undergrad/courses/compsci/meng-software-eng/}
+             {MEng (1st Class Hons) Software Engineering}}%
+
+\section{Additional Information}
+
+\textbf{Other Skills:} Fluent Welsh speaker.
+
+\halfblankline
+
+\textbf{Other Achievements:} Passionate about good mental health and fundraise for the Mental Health Foundation. Raised £1,102 through bake sales and sponsorship to run the Hackney Half Marathon in 2017. Followed this up in April 2019 by running the London Marathon and raising £2,326.
+
+\halfblankline
+
+\textbf{Interests:} Some of my interests include video games, reading and travel. Within the past year, the best game I've played is Civilization VI, the best books I've read are Born to Run by Christopher McDougall and Salt Fat Acid Heat by Samin Nosrat, and the best destination I've visited was Milford Sound, New Zealand. I'm also a keen baker and naturally a fan of Lego, being the proud owner of the UCS Tumbler and UCS Slave 1.
+
+\section{Referees}
+
+References available on request.
+
+\end{document}
+
